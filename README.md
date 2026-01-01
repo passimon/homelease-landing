@@ -41,13 +41,6 @@ The site is a lightweight, single-file static application (`index.html`), making
 3. Click **Add New Project** and select this repository.
 4. Click **Deploy**. Vercel will automatically detect the static HTML and host it on a global CDN.
 
-### Local Development
-Simply clone the repo and open the file:
-```bash
-git clone [https://github.com/YOUR_USERNAME/homelease-landing.git](https://github.com/YOUR_USERNAME/homelease-landing.git)
-cd homelease-landing
-open index.html```
-
 LicenseCopyright © 2026 homeLease Inc.Distributed under the MIT License.
 
 📬 ContactProject Link: https://github.com/YOUR_USERNAME/homelease-landing
