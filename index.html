@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>homeLease | Find your next temporary home</title>
+    <meta name="description" content="Live anywhere. Rent everywhere. The secure platform connecting tenants and hosts.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Brand Colors extracted from your React Native code */
+            --primary: #1976D2;        /* Google Blue */
+            --primary-dark: #1565C0;
+            --primary-light: #E3F2FD;
+            --accent: #4285F4;
+            
+            /* Neutrals */
+            --text-main: #1A1A1A;
+            --text-secondary: #5F6368;
+            --surface: #FFFFFF;
+            --bg-body: #FFFFFF;
+            --border: #E0E0E0;
+            
+            /* Effects */
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-lg: 0 20px 40px -10px rgba(0,0,0,0.12);
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: all 0.2s ease; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* --- Utility Classes --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+        }
+        
+        .btn:active { transform: scale(0.98); }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.25);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 6px 16px rgba(25, 118, 210, 0.35);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--text-main);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: var(--text-main);
+            color: white;
+        }
+
+        .badge {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        /* --- Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            z-index: 1000;
+            padding: 16px 0;
+        }
+
+        .nav-wrapper { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        nav ul { display: none; gap: 40px; }
+        @media(min-width: 768px) { nav ul { display: flex; } }
+
+        nav a { font-weight: 500; color: var(--text-secondary); font-size: 0.95rem; }
+        nav a:hover { color: var(--primary); }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding-top: 160px;
+            padding-bottom: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background Blob */
+        .hero-blob {
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.08) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media(min-width: 992px) { .hero-grid { grid-template-columns: 1.1fr 0.9fr; } }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1.5px;
+            color: var(--text-main);
+        }
+
+        @media(min-width: 768px) { .hero-content h1 { font-size: 4rem; } }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        /* App Store Buttons */
+        .store-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+        
+        .store-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #000000;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 12px;
+            transition: opacity 0.2s, transform 0.2s;
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .store-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+        .store-btn i { font-size: 1.75rem; }
+        .store-text { display: flex; flex-direction: column; line-height: 1.2; }
+        .store-text span:first-child { font-size: 0.7rem; font-weight: 400; }
+        .store-text span:last-child { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.5px; }
+
+        /* --- 3D Phone Mockup --- */
+        .mockup-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            perspective: 1500px;
+        }
+
+        .phone-frame {
+            width: 320px;
+            height: 650px;
+            background: #fff;
+            border: 10px solid #1a1a1a;
+            border-radius: 48px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 0 2px #333,
+                0 50px 100px -20px rgba(0, 0, 0, 0.3);
+            transform: rotateY(-12deg) rotateX(5deg);
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 2;
+        }
+
+        .phone-frame:hover { transform: rotateY(0deg) rotateX(0deg); }
+
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 28px;
+            background: #1a1a1a;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 20;
+        }
+
+        /* Status Bar Simulation */
+        .status-bar {
+            position: absolute;
+            top: 5px;
+            width: 100%;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            font-weight: 600;
+            color: #000;
+            z-index: 10;
+        }
+
+        /* App UI */
+        .app-screen {
+            width: 100%;
+            height: 100%;
+            background: #FAFAFA;
+            display: flex;
+            flex-direction: column;
+            padding-top: 40px; /* Space for notch */
+        }
+
+        .mock-header {
+            padding: 10px 20px 20px;
+            background: #fff;
+        }
+
+        .mock-search {
+            background: #F5F5F5;
+            border-radius: 30px;
+            padding: 12px 16px;
+            color: #757575;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .mock-scroll {
+            flex: 1;
+            overflow: hidden;
+            padding: 0 20px;
+            background: #FAFAFA;
+        }
+
+        .mock-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+        }
+        
+        .mock-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .mock-heart {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.8);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+        }
+
+        .mock-details { padding: 16px; }
+        .mock-title { font-weight: 700; font-size: 16px; color: var(--text-main); margin-bottom: 4px; }
+        .mock-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+        .mock-price { font-weight: 700; color: var(--text-main); font-size: 15px; }
+        .mock-price span { font-weight: 400; color: var(--text-secondary); }
+
+        /* Floating Chat UI */
+        .floating-chat {
+            position: absolute;
+            bottom: 60px;
+            right: -60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            width: 260px;
+            z-index: 5;
+            border: 1px solid rgba(255,255,255,0.5);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .chat-header { font-weight: 700; font-size: 0.9rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .chat-dot { width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; }
+
+        .chat-message { display: flex; gap: 10px; margin-bottom: 12px; }
+        .chat-avatar { width: 36px; height: 36px; border-radius: 50%; background: #E0E0E0; flex-shrink: 0; background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80'); background-size: cover; }
+        .chat-bubble { background: #F1F3F4; padding: 10px 14px; border-radius: 18px; border-top-left-radius: 4px; font-size: 0.85rem; color: #333; line-height: 1.4; }
+        
+        .chat-message.right { flex-direction: row-reverse; }
+        .chat-message.right .chat-bubble { background: var(--primary); color: white; border-radius: 18px; border-top-right-radius: 4px; }
+
+        /* --- Features Section --- */
+        .features { padding: 100px 0; background: #fff; }
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 16px; color: var(--text-main); }
+        .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        
+        .feature-card {
+            padding: 40px 32px;
+            border-radius: var(--radius-xl);
+            background: #fff;
+            border: 1px solid #F0F0F0;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+            transform: translateY(-8px);
+        }
+
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 20px;
+            display: grid;
+            place-items: center;
+            font-size: 1.75rem;
+            margin-bottom: 24px;
+        }
+
+        .feature-card h3 { font-size: 1.35rem; margin-bottom: 12px; font-weight: 700; }
+        .feature-card p { color: var(--text-secondary); font-size: 1rem; line-height: 1.6; }
+
+        /* --- Workflow Section --- */
+        .workflow { padding: 100px 0; background: #F8F9FA; }
+        
+        .workflow-row { display: flex; align-items: center; gap: 80px; margin-bottom: 100px; }
+        .workflow-row:last-child { margin-bottom: 0; }
+        .workflow-row:nth-child(even) { flex-direction: row-reverse; }
+
+        @media(max-width: 900px) { .workflow-row, .workflow-row:nth-child(even) { flex-direction: column; gap: 40px; } }
+
+        .workflow-img {
+            flex: 1;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+        
+        .workflow-img img { width: 100%; height: auto; display: block; transition: transform 0.5s; }
+        .workflow-img:hover img { transform: scale(1.03); }
+
+        .workflow-text { flex: 1; }
+        .workflow-text h3 { font-size: 2.25rem; margin-bottom: 20px; font-weight: 800; line-height: 1.2; }
+        .workflow-text p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 32px; line-height: 1.6; }
+
+        /* --- CTA --- */
+        .cta {
+            padding: 100px 0;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+        }
+
+        .cta h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 24px; position: relative; }
+        .cta p { margin-bottom: 40px; opacity: 0.9; font-size: 1.2rem; position: relative; }
+        
+        .btn-white {
+            background: white;
+            color: var(--primary);
+            padding: 16px 48px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .btn-white:hover { background: #F5F5F5; transform: translateY(-2px); }
+
+        /* --- Footer --- */
+        footer { padding: 80px 0 40px; background: white; border-top: 1px solid var(--border); }
+
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 60px; }
+        .footer-col h4 { margin-bottom: 24px; font-weight: 700; color: var(--text-main); }
+        .footer-col ul li { margin-bottom: 14px; }
+        .footer-col a { color: var(--text-secondary); font-size: 0.95rem; }
+        .footer-col a:hover { color: var(--primary); text-decoration: underline; }
+
+        .copyright { text-align: center; padding-top: 40px; border-top: 1px solid var(--border); color: #999; font-size: 0.9rem; }
+
+        /* Scroll Animation Utility */
+        [data-animate] { opacity: 0; transform: translateY(30px); transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        [data-animate].visible { opacity: 1; transform: translateY(0); }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-wrapper">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-house-chimney" style="font-size: 1.2rem;"></i> homeLease
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How it works</a></li>
+                    <li><a href="#host">Become a Host</a></li>
+                </ul>
+            </nav>
+            <a href="https://drive.google.com/file/d/1E2MvUPt9VkW84BWIcnsqHR17GFC7vQmY/view?usp=sharing" target="_blank" class="btn btn-primary">
+                <i class="fa-solid fa-download" style="margin-right: 8px;"></i> Download App
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-blob"></div>
+        <div class="container hero-grid">
+            <div class="hero-content" data-animate>
+                <span class="badge">Version 1.0 Live</span>
+                <h1>Find your next <br>temporary home.</h1>
+                <p>Live anywhere. Rent everywhere. The secure platform connecting tenants and hosts for flexible living arrangements with direct, secure communication.</p>
+                
+                <div class="store-buttons">
+                    <a href="https://drive.google.com/file/d/1E2MvUPt9VkW84BWIcnsqHR17GFC7vQmY/view?usp=sharing" target="_blank" class="store-btn">
+                        <i class="fa-brands fa-apple"></i>
+                        <div class="store-text">
+                            <span>Download on the</span>
+                            <span>App Store</span>
+                        </div>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1E2MvUPt9VkW84BWIcnsqHR17GFC7vQmY/view?usp=sharing" target="_blank" class="store-btn">
+                        <i class="fa-brands fa-google-play"></i>
+                        <div class="store-text">
+                            <span>GET IT ON</span>
+                            <span>Google Play</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mockup-wrapper" data-animate>
+                <div class="phone-frame">
+                    <div class="notch"></div>
+                    <div class="status-bar">
+                        <span>9:41</span>
+                        <span><i class="fa-solid fa-signal"></i> <i class="fa-solid fa-wifi"></i> <i class="fa-solid fa-battery-full"></i></span>
+                    </div>
+                    
+                    <div class="app-screen">
+                        <div class="mock-header">
+                            <div class="mock-search">
+                                <i class="fa-solid fa-magnifying-glass" style="color: #1976D2;"></i>
+                                <span style="font-weight: 500; color: #333;">Where to?</span>
+                                <span style="color: #BDBDBD; margin-left: auto; font-size: 12px;">Anywhere • Any week</span>
+                            </div>
+                        </div>
+
+                        <div class="mock-scroll">
+                            
+                            <div class="mock-card">
+                                <div class="mock-img" style="background-image: url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80')">
+                                    <div class="mock-heart"><i class="fa-regular fa-heart" style="color: #333;"></i></div>
+                                </div>
+                                <div class="mock-details">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="mock-title">Modern City Loft</div>
+                                        <div style="font-size: 13px; display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-star" style="color: #1976D2; font-size: 11px;"></i> 4.98</div>
+                                    </div>
+                                    <div class="mock-meta">Berlin, Germany</div>
+                                    <div class="mock-price">€1,200 <span>/ month</span></div>
+                                </div>
+                            </div>
+
+                             <div class="mock-card">
+                                <div class="mock-img" style="background-image: url('https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=600&q=80')">
+                                    <div class="mock-heart"><i class="fa-regular fa-heart" style="color: #333;"></i></div>
+                                </div>
+                                <div class="mock-details">
+                                    <div class="mock-title">Cozy Studio</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="floating-chat">
+                    <div class="chat-header">
+                        <span class="chat-dot"></span> New Message
+                    </div>
+                    <div class="chat-message">
+                        <div class="chat-avatar"></div>
+                        <div class="chat-bubble">Is the apartment available from September 1st?</div>
+                    </div>
+                    <div class="chat-message right">
+                        <div class="chat-bubble">Yes! It's available.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header" data-animate>
+                <h2>Settling in made simple.</h2>
+                <p>We've stripped away the complexity of renting. No agents, no hidden fees, just people connecting with people.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card" data-animate>
+                    <div class="icon-box">
+                        <i class="fa-solid fa-earth-americas"></i>
+                    </div>
+                    <h3>Explore Listings</h3>
+                    <p>Advanced filtering by location, price, and amenities. View high-quality photos and detailed descriptions before you book.</p>
+                </div>
+                
+                <div class="feature-card" data-animate>
+                    <div class="icon-box">
+                        <i class="fa-solid fa-key"></i>
+                    </div>
+                    <h3>List Your Property</h3>
+                    <p>Easily monetize your space. Create listings with our step-by-step wizard, manage availability, and set your own prices.</p>
+                </div>
+
+                <div class="feature-card" data-animate>
+                    <div class="icon-box">
+                        <i class="fa-solid fa-comment-dots"></i>
+                    </div>
+                    <h3>Direct Chat</h3>
+                    <p>Connect instantly with hosts or tenants via our secure in-app messaging system. No third-party messengers needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="workflow">
+        <div class="container">
+            <div class="workflow-row" data-animate>
+                <div class="workflow-text">
+                    <h3>Search smartly. <br>Find gems.</h3>
+                    <p>Filter by move-in date, number of guests, and specific amenities like Wifi or Dedicated Workspace. Our endless feed helps you discover hidden gems in your favorite cities.</p>
+                    <a href="#features" class="btn btn-outline">Explore Map Features</a>
+                </div>
+                <div class="workflow-img">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" alt="Apartment Interior">
+                </div>
+            </div>
+
+            <div class="workflow-row" data-animate>
+                <div class="workflow-text">
+                    <h3>Manage everything <br>in one place.</h3>
+                    <p>Whether you are a tenant checking bookings or a host updating your property details, the <strong>Account</strong> dashboard gives you full control over your profile and objects.</p>
+                    <a href="#host" class="btn btn-outline">View Dashboard UI</a>
+                </div>
+                <div class="workflow-img">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80" alt="User using phone">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container" data-animate>
+            <h2>Ready to make your move?</h2>
+            <p>Join thousands of users finding their home away from home.</p>
+            <a href="https://drive.google.com/file/d/1E2MvUPt9VkW84BWIcnsqHR17GFC7vQmY/view?usp=sharing" target="_blank" class="btn btn-white">
+                <i class="fa-solid fa-download" style="margin-right: 8px;"></i> Download for Free
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="#" class="logo" style="margin-bottom: 20px;">
+                        <i class="fa-solid fa-house-chimney"></i> homeLease
+                    </a>
+                    <p style="font-size: 0.9rem; color: #757575; line-height: 1.6;">
+                        Redefining the rental experience with modern technology, transparency, and secure connections.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Trust & Safety</a></li>
+                        <li><a href="#">Cancellation Options</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 homeLease Inc. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('[data-animate]');
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
